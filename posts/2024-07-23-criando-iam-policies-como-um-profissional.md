@@ -90,14 +90,176 @@ Implementando essas boas práticas, você pode criar políticas IAM mais seguras
 
 ```json
 {
-  "Version": "2012-10-17", 
+  "Version": "2012-10-17",
   "Statement": [
-             {
-               "Effect": "Allow",
-               "Action": "s3",
-               "Resource": "arn:aws:s3:::example_bucket"
-             }
-              ]
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::example_bucket"
+    }
+  ]
+}
+
+```
+
+## 3. Ordem de Permissão
+
+### Como a AWS avalia permissões
+
+A AWS avalia permissões seguindo uma ordem específica:
+1. **Negação explícita:** Se uma política nega explicitamente uma ação, a ação será negada.
+2. **Permissão explícita:** Se uma política permite explicitamente uma ação, a ação será permitida, a menos que exista uma negação explícita.
+3. **Negação padrão:** Por padrão, todas as ações são negadas, a menos que sejam explicitamente permitidas.
+
+### Permissões cumulativas e conflitos
+
+## Permissões Cumulativas e Conflitos
+
+### Entendendo Permissões Cumulativas
+
+Na AWS, as permissões são cumulativas. Isso significa que, quando um usuário, grupo ou role tem múltiplas políticas associadas, as permissões resultantes são a soma das permissões concedidas por todas essas políticas. Se uma política permite uma ação e outra política também permite a mesma ação, o usuário terá permissão para realizar essa ação.
+
+### Exemplos de Permissões Cumulativas
+
+Imagine que você tem um usuário com duas políticas anexadas:
+
+1. **Política A**:
+    ```
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "s3:ListBucket",
+          "Resource": "arn:aws:s3:::example_bucket"
+        }
+      ]
+    }
+    ```
+
+2. **Política B**:
+    ```
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "s3:GetObject",
+          "Resource": "arn:aws:s3:::example_bucket/*"
+        }
+      ]
+    }
+    ```
+
+Nesse caso, o usuário terá permissão tanto para listar o bucket `example_bucket` quanto para obter objetos dentro desse bucket.
+
+### Lidando com Conflitos
+
+Enquanto as permissões são cumulativas, os conflitos de permissões são resolvidos de forma que as negações explícitas prevaleçam sobre permissões explícitas. Se qualquer política anexada a um usuário ou grupo nega explicitamente uma ação, essa negação terá prioridade sobre qualquer permissão que permita essa ação.
+
+### Exemplo de Conflito
+
+Considere um usuário com as seguintes políticas anexadas:
+
+1. **Política C** (Permitir):
+    ```
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "s3:DeleteObject",
+          "Resource": "arn:aws:s3:::example_bucket/*"
+        }
+      ]
+    }
+    ```
+
+2. **Política D** (Negar):
+    ```
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Deny",
+          "Action": "s3:DeleteObject",
+          "Resource": "arn:aws:s3:::example_bucket/sensitive_data/*"
+        }
+      ]
+    }
+    ```
+
+Aqui, a Política C permite que o usuário exclua objetos em qualquer local do bucket `example_bucket`, mas a Política D nega especificamente a exclusão de objetos no diretório `sensitive_data` dentro do bucket. A negação explícita na Política D prevalece, então o usuário não poderá excluir objetos em `example_bucket/sensitive_data`, mesmo que a Política C permita essa ação para outras partes do bucket.
+
+### Princípios Importantes
+
+1. **Negação Explícita Tem Prioridade**: Se uma política negar explicitamente uma ação, essa negação prevalecerá, mesmo que outras políticas permitam a ação.
+2. **Permissões Implícitas São Negadas**: Qualquer ação não explicitamente permitida é implicitamente negada. Portanto, você deve ser explícito sobre todas as ações que deseja permitir.
+3. **Avaliando Todas as Políticas**: A AWS avalia todas as políticas anexadas a um usuário ou grupo ao decidir permitir ou negar uma ação. Isso inclui políticas IAM, resource policies, SCPs e permissions boundaries.
+
+## 4. Tipos de Políticas na AWS
+
+### Políticas IAM
+
+Políticas anexadas a usuários, grupos ou roles IAM. Elas definem permissões que são aplicadas em uma base global para os recursos da AWS.
+
+### Resource Policies
+
+Políticas anexadas diretamente a recursos da AWS, como buckets S3, KMS, SQS. Elas definem quem pode acessar esses recursos e de que maneira. Por exemplo
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:DeleteObject",
+      "Resource": "arn:aws:s3:::example_bucket/sensitive_data/*"
+    }
+  ]
 }
 ```
 
+Esta declaração nega a qualquer pessoa a permissão de excluir objetos no diretório `sensitive_data` do bucket `example_bucket`
+
+### Service Control Policies (SCP)
+
+Políticas aplicadas a contas da AWS organizadas no AWS Organizations. Elas restringem as permissões máximas que as contas podem conceder.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": "s3:DeleteBucket",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Esta declaração nega a permissão de excluir qualquer bucket S3 em todas as contas dentro da organização.
+
+### Permissions Boundaries
+
+Permissions Boundaries são uma forma de definir limites de permissões para roles ou usuários no IAM da AWS. Elas funcionam como um "limite máximo" que uma política de permissões pode conceder. Enquanto as políticas IAM comuns definem o que um usuário ou role pode fazer, os boundaries definem o que esses usuários ou roles podem conceder a si mesmos ou a outros.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Esta declaração permite listar qualquer bucket S3 e obter objetos de qualquer bucket S3, desde que a role ou o usuário tenha essa política anexada como uma boundary. No entanto, mesmo que a role tenha permissões adicionais na política principal, essas permissões não podem exceder as definidas aqui.
