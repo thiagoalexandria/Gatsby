@@ -188,7 +188,7 @@ Na AWS, as permissões são cumulativas. Isso significa que, quando um usuário,
 Imagine que você tem um usuário com duas políticas anexadas:
 
 1. **Política A**:
-    ```
+    ```json
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -202,7 +202,7 @@ Imagine que você tem um usuário com duas políticas anexadas:
     ```
 
 2. **Política B**:
-    ```
+    ```json
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -226,7 +226,7 @@ Enquanto as permissões são cumulativas, os conflitos de permissões são resol
 Considere um usuário com as seguintes políticas anexadas:
 
 1. **Política C** (Permitir):
-    ```
+    ```json
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -240,7 +240,7 @@ Considere um usuário com as seguintes políticas anexadas:
     ```
 
 2. **Política D** (Resource Policy Negar) :
-    ```
+    ```json
     {
       "Version": "2012-10-17",
       "Statement": [
