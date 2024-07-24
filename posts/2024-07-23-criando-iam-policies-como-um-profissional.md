@@ -5,7 +5,7 @@ description: Neste artigo, exploraremos as melhores práticas e técnicas
   avançadas para a criação de políticas IAM. Aprenda a proteger recursos
   críticos e a gerenciar permissões com eficiência, garantindo a segurança e a
   conformidade da sua infraestrutura em nuvem como um verdadeiro profissional.
-date: 2024-07-23
+date: 2024-07-26
 category: aws
 background: "#FF9900"
 tags:
@@ -61,7 +61,7 @@ Adicione descrições e comentários às suas políticas para que outras pessoas
 Use ferramentas como o AWS IAM Policy Simulator para testar suas políticas antes de aplicá-las em produção. Isso ajuda a garantir que as permissões funcionem conforme esperado e que não haja permissões excessivas ou faltantes.
 
 6. Revisão Periódica
-Revise regularmente suas políticas IAM para garantir que ainda atendam aos requisitos de segurança e de negócios. Revise e ajuste as permissões conforme as necessidades da equipe e da organização mudem.
+Revise regularmente suas políticas IAM, utilize o IAM Access Analyzer, uma ferramenta poderosa para auxiliar a identificar politicas com Over Permissions, além de informar se as roles estão em uso para que seja passível de limpeza.
 
 7. Segregação de Funções
 Separe as funções administrativas das funções operacionais. Por exemplo, não conceda permissões de administração de contas a usuários que apenas precisam acessar recursos específicos.
@@ -75,9 +75,9 @@ Prefira políticas gerenciadas a políticas inline. Políticas gerenciadas são 
 10. Limite o Uso de Wildcards
 Evite o uso excessivo de caracteres curinga (*) Eles podem abrir permissões mais amplas do que o necessário, comprometendo a segurança dos recursos.
 
-Implementando essas boas práticas, você pode criar políticas IAM mais seguras, eficientes e fáceis de gerenciar
+Antes de iniciarmos, é necessário que saibamos toda a estrutura de uma policy, seus componentes e os tipos de políticas que podem ser desenvolvida.
 
-## 2. Estrutura de uma Policy
+## 2. Estrutura de uma Policy 
 
 ### Componentes de uma política IAM
 
@@ -239,7 +239,7 @@ Considere um usuário com as seguintes políticas anexadas:
     }
     ```
 
-2. **Política D** (Negar):
+2. **Política D** (Resource Policy Negar) :
     ```
     {
       "Version": "2012-10-17",
@@ -253,10 +253,16 @@ Considere um usuário com as seguintes políticas anexadas:
     }
     ```
 
-Aqui, a Política C permite que o usuário exclua objetos em qualquer local do bucket `example_bucket`, mas a Política D nega especificamente a exclusão de objetos no diretório `sensitive_data` dentro do bucket. A negação explícita na Política D prevalece, então o usuário não poderá excluir objetos em `example_bucket/sensitive_data`, mesmo que a Política C permita essa ação para outras partes do bucket.
+Aqui, a Política C permite que o usuário exclua objetos em qualquer local do bucket `example_bucket`, mas o bucket possui uma `Resource Policy`, a Política D, que nega especificamente a exclusão de objetos no diretório `sensitive_data` dentro do bucket. A negação explícita na Política D prevalece, então o usuário não poderá excluir objetos em `example_bucket/sensitive_data`, mesmo que a Política C permita essa ação para outras partes do bucket.
 
 ### Princípios Importantes
 
 1. **Negação Explícita Tem Prioridade**: Se uma política negar explicitamente uma ação, essa negação prevalecerá, mesmo que outras políticas permitam a ação.
 2. **Permissões Implícitas São Negadas**: Qualquer ação não explicitamente permitida é implicitamente negada. Portanto, você deve ser explícito sobre todas as ações que deseja permitir.
 3. **Avaliando Todas as Políticas**: A AWS avalia todas as políticas anexadas a um usuário ou grupo ao decidir permitir ou negar uma ação. Isso inclui políticas IAM, resource policies, SCPs e permissions boundaries.
+
+## Fechamento
+
+Nesta primeira parte, abordamos boas práticas na criação de políticas IAM, a estrutura de uma policy, os diferentes tipos de políticas na AWS, e como a ordem de permissão funciona. 
+
+No próximo post vamos entender como criar políticas mais sofisticadas utilizando conditions e deixando-as mais seguras e com escopos bem definidos.
