@@ -102,7 +102,75 @@ Implementando essas boas práticas, você pode criar políticas IAM mais seguras
 
 ```
 
-## 3. Ordem de Permissão
+## 3. Tipos de Políticas na AWS
+
+### Políticas IAM
+
+Políticas anexadas a usuários, grupos ou roles IAM. Elas definem permissões que são aplicadas em uma base global para os recursos da AWS.
+
+### Resource Policies
+
+Políticas anexadas diretamente a recursos da AWS, como buckets S3, KMS, SQS. Elas definem quem pode acessar esses recursos e de que maneira. Por exemplo
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:DeleteObject",
+      "Resource": "arn:aws:s3:::example_bucket/sensitive_data/*"
+    }
+  ]
+}
+```
+
+Esta declaração nega a qualquer pessoa a permissão de excluir objetos no diretório `sensitive_data` do bucket `example_bucket`
+
+### Service Control Policies (SCP)
+
+Políticas aplicadas a contas da AWS organizadas no AWS Organizations. Elas restringem as permissões máximas que as contas podem conceder.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": "s3:DeleteBucket",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Esta declaração nega a permissão de excluir qualquer bucket S3 em todas as contas dentro da organização.
+
+### Permissions Boundaries
+
+Permissions Boundaries são uma forma de definir limites de permissões para roles ou usuários no IAM da AWS. Elas funcionam como um "limite máximo" que uma política de permissões pode conceder. Enquanto as políticas IAM comuns definem o que um usuário ou role pode fazer, os boundaries definem o que esses usuários ou roles podem conceder a si mesmos ou a outros.
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+Esta politica permite listar qualquer bucket S3 e obter objetos de qualquer bucket S3, desde que a role ou o usuário tenha essa política anexada como uma boundary. No entanto, mesmo que a role tenha permissões adicionais na política principal, essas permissões não podem exceder as definidas aqui.
+
+
+## 4. Ordem de Permissão
 
 ### Como a AWS avalia permissões
 
@@ -110,10 +178,6 @@ A AWS avalia permissões seguindo uma ordem específica:
 1. **Negação explícita:** Se uma política nega explicitamente uma ação, a ação será negada.
 2. **Permissão explícita:** Se uma política permite explicitamente uma ação, a ação será permitida, a menos que exista uma negação explícita.
 3. **Negação padrão:** Por padrão, todas as ações são negadas, a menos que sejam explicitamente permitidas.
-
-### Permissões cumulativas e conflitos
-
-## Permissões Cumulativas e Conflitos
 
 ### Entendendo Permissões Cumulativas
 
@@ -196,70 +260,3 @@ Aqui, a Política C permite que o usuário exclua objetos em qualquer local do b
 1. **Negação Explícita Tem Prioridade**: Se uma política negar explicitamente uma ação, essa negação prevalecerá, mesmo que outras políticas permitam a ação.
 2. **Permissões Implícitas São Negadas**: Qualquer ação não explicitamente permitida é implicitamente negada. Portanto, você deve ser explícito sobre todas as ações que deseja permitir.
 3. **Avaliando Todas as Políticas**: A AWS avalia todas as políticas anexadas a um usuário ou grupo ao decidir permitir ou negar uma ação. Isso inclui políticas IAM, resource policies, SCPs e permissions boundaries.
-
-## 4. Tipos de Políticas na AWS
-
-### Políticas IAM
-
-Políticas anexadas a usuários, grupos ou roles IAM. Elas definem permissões que são aplicadas em uma base global para os recursos da AWS.
-
-### Resource Policies
-
-Políticas anexadas diretamente a recursos da AWS, como buckets S3, KMS, SQS. Elas definem quem pode acessar esses recursos e de que maneira. Por exemplo
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Principal": "*",
-      "Action": "s3:DeleteObject",
-      "Resource": "arn:aws:s3:::example_bucket/sensitive_data/*"
-    }
-  ]
-}
-```
-
-Esta declaração nega a qualquer pessoa a permissão de excluir objetos no diretório `sensitive_data` do bucket `example_bucket`
-
-### Service Control Policies (SCP)
-
-Políticas aplicadas a contas da AWS organizadas no AWS Organizations. Elas restringem as permissões máximas que as contas podem conceder.
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Deny",
-      "Action": "s3:DeleteBucket",
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-Esta declaração nega a permissão de excluir qualquer bucket S3 em todas as contas dentro da organização.
-
-### Permissions Boundaries
-
-Permissions Boundaries são uma forma de definir limites de permissões para roles ou usuários no IAM da AWS. Elas funcionam como um "limite máximo" que uma política de permissões pode conceder. Enquanto as políticas IAM comuns definem o que um usuário ou role pode fazer, os boundaries definem o que esses usuários ou roles podem conceder a si mesmos ou a outros.
-
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:ListBucket",
-        "s3:GetObject"
-      ],
-      "Resource": "*"
-    }
-  ]
-}
-```
-
-Esta declaração permite listar qualquer bucket S3 e obter objetos de qualquer bucket S3, desde que a role ou o usuário tenha essa política anexada como uma boundary. No entanto, mesmo que a role tenha permissões adicionais na política principal, essas permissões não podem exceder as definidas aqui.
