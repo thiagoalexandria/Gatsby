@@ -5,8 +5,8 @@ description: "Segurança em ambientes cloud não é mais opcional, é prioridade
   se você trabalha com AWS, provavelmente já ouviu falar em CIS, PCI-DSS, ISO
   27001, SOC2 e outras sopas de letrinhas que exigem atenção especial. "
 date: 2025-07-25
-category: security
-background: "#7B68EE"
+category: sec
+background: "#4E457FFF"
 tags:
   - SEGURANÇA
   - NUVEM

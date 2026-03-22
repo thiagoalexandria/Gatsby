@@ -6,8 +6,8 @@ description: Passei na prova AWS Certified Security – Specialty! Decidi criar
   e as principais lições que aprendi ao longo do caminho. Se você está
   considerando fazer essa prova, este post é para você!
 date: 2024-11-23
-category: security
-background: "#7B68EE"
+category: sec
+background: "#4E457FFF"
 tags:
   - AWS
   - SECURITY

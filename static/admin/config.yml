@@ -28,7 +28,7 @@ collections:
         label: "Category",
         name: "category",
         widget: "select",
-        options: ["win", "linux", "aws", "dev", "devops", "news", "security", "ai"]
+        options: ["win", "linux", "aws", "dev", "devops", "news", "sec", "ai"]
       }
       - {
         label: "Background",
@@ -41,7 +41,7 @@ collections:
           { label: 'DEV', value: '#EB7728' },
           { label: 'DEVOPS', value: '#05A6F0' },
           { label: 'NEWS', value: '#D6BA32' },
-          { label: 'SECURITY', value: '#7B68EE' },
+          { label: 'SECURITY', value: '#4E457FFF' },
           { label: 'AI', value: '#FF6B6B' },
         ]
       }

@@ -7,8 +7,8 @@ description: "Em ambientes de nuvem, a velocidade dos deploys cresce
   colateral perigoso: erros de configuração podem ir para produção em minutos,
   abrindo portas para incidentes de segurança que poderiam ter sido evitados."
 date: 2026-02-19
-category: security
-background: "#7B68EE"
+category: sec
+background: "#4E457FFF"
 status: ready
 tags:
   - SECURITYASCODE

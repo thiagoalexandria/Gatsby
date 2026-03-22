@@ -8,8 +8,8 @@ description: No universo da AWS, escolher a ferramenta certa para gerenciar
   Parameter Store, destacando seus casos de uso ideais, vantagens, limitações e
   implicações de custo.
 date: 2026-03-06
-category: security
-background: "#7B68EE"
+category: sec
+background: "#4E457FFF"
 tags:
   - AWS
   - SECRETSMANAGER

@@ -9,8 +9,8 @@ description: Problemas em clusters Kubernetes raramente acontecem de forma
   utilizando context keys e integração via MCP para analisar logs, eventos e
   configurações de forma estruturada.
 date: 2026-03-09
-category: devops
-background: "#05A6F0"
+category: ai
+background: "#FF6B6B"
 tags:
   - KUBERNETES
   - TROUBLESHOOTINGKUBERNETES
