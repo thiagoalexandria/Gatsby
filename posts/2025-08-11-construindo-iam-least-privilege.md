@@ -8,8 +8,8 @@ description: Em ambientes AWS, dar permissões de Admin para todos pode até ser
   necessárias para realizar suas funções, reduzindo riscos e aumentando a
   segurança.
 date: 2025-10-28
-category: aws
-background: "#FF9900"
+category: security
+background: "#7B68EE"
 tags:
   - IAM
   - AWSPERMISSIONS

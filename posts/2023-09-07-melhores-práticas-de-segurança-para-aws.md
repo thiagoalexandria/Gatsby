@@ -5,8 +5,8 @@ description: Descubra como proteger sua infraestrutura na Amazon Web Services
   (AWS) com as Melhores Práticas de Segurança. Este artigo aborda as principais
   estratégias para garantir a segurança de seus recursos na nuvem.
 date: 2023-10-17
-category: aws
-background: "#FF9900"
+category: security
+background: "#7B68EE"
 tags:
   - SEGURANÇA
   - AWS

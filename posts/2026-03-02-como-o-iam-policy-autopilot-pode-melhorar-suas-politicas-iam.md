@@ -8,8 +8,8 @@ description: Criar políticas IAM com least privilege sempre foi um desafio que
   open source acelera desenvolvimento, reduz erros de permissão, e se integra
   perfeitamente com assistentes de IA.
 date: 2026-03-02
-category: aws
-background: "#FF9900"
+category: security
+background: "#7B68EE"
 tags:
   - IAM
   - SECURITY
