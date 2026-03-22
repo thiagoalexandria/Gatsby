@@ -1,6 +1,6 @@
 ---
 image: /assets/img/AWS.png
-title: Observabilidade Completa no EKS Metricas Logs e Traces
+title: "Observabilidade Completa no EKS: Métricas, Logs e Traces"
 description: Construa uma stack de observabilidade completa para seu cluster EKS
   usando Prometheus, Grafana e OpenTelemetry. Este artigo mostra como
   implementar os tres pilares da observabilidade, desde a coleta de metricas ate
