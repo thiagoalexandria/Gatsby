@@ -1,6 +1,6 @@
 ---
 image: /assets/img/AWS.png
-title: Automatizando CI/CD com Kiro Do Commit ao Deploy
+title: "Automatizando CI/CD com Kiro: Do Commit ao Deploy"
 description: Use o Kiro para acelerar a criacao, manutencao e troubleshooting de
   pipelines CI/CD. Aprenda a criar agents especializados que geram pipelines,
   debugam builds falhando e adicionam security scanning automaticamente aos seus
