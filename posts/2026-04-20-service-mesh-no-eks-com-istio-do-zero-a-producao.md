@@ -1,6 +1,6 @@
 ---
 image: /assets/img/AWS.png
-title: Service Mesh no EKS com Istio Do Zero a Producao
+title: "Service Mesh no EKS com Istio: Do Zero a Produção"
 description: Implemente um service mesh completo no Amazon EKS usando Istio.
   Aprenda a configurar mTLS automatico entre microservicos, traffic management
   avancado com canary deployments, circuit breakers e observabilidade nativa sem
