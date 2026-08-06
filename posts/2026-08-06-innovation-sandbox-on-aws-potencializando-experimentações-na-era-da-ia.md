@@ -348,7 +348,7 @@ Pontos importantes para monitorar:
 * Budget consumption por lease
 * Erros no Step Functions de cleanup
 
-(FOTO STEP FUNCTIONS)
+![](/assets/img/aws-step-cleanup.png)
 
 ## Custo da solução
 
