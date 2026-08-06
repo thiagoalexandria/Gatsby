@@ -29,7 +29,7 @@ categories:
 ---
 Imagine a seguinte cena: um engenheiro do seu time quer testar o Amazon Bedrock com um novo modelo de IA generativa. Ele precisa de uma conta AWS isolada, com permissões adequadas, controle de gastos e que seja automaticamente limpa depois do experimento. Hoje, quanto tempo esse processo leva na sua organização?
 
-Se a resposta envolve "abrir ticket", "esperar aprovação de 3 gestores", "provisionar conta manualmente" e "torcer para alguém lembrar de limpar depois" — você não está sozinho. E é exatamente esse gargalo que mata a inovação.
+Se a resposta envolve "abrir ticket", "esperar aprovação de 3 gestores", "provisionar conta manualmente" e "torcer para alguém lembrar de limpar depois", você não está sozinho. E é exatamente esse gargalo que mata a inovação.
 
 Em um cenário onde cada semana surge um novo serviço de IA, um novo modelo, uma nova arquitetura para testar, o tempo entre "tive uma ideia" e "consegui testar" precisa ser mínimo. E é aqui que o Innovation Sandbox on AWS entra.
 
@@ -68,36 +68,17 @@ Se seu time leva 2 semanas para conseguir um ambiente de teste, vocês estão se
 
 ## Innovation Sandbox on AWS: A solução
 
-O Innovation Sandbox on AWS é uma solução open source da AWS que automatiza completamente o ciclo de vida de contas sandbox — do provisionamento à reciclagem.
+O Innovation Sandbox on AWS é uma solução open source da AWS que automatiza completamente o ciclo de vida de contas sandbox, do provisionamento à reciclagem.
 
 ### Como funciona
 
 O fluxo é elegante na sua simplicidade:
 
-```
-Usuário solicita sandbox → Aprovação (opcional) → Conta ativada
-                                                        ↓
-                                              Usa por X dias ou $Y
-                                                        ↓
-                                              Limite atingido
-                                                        ↓
-                                              Limpeza automática (AWS Nuke)
-                                                        ↓
-                                              Conta reciclada → Pool
-```
+![aws-innocation-fluxo](/assets/img/aws-innocation-fluxo.png)
 
 A solução não cria nem fecha contas AWS. Ela gerencia um **pool de contas existentes**, movendo-as entre Organizational Units (OUs) conforme o ciclo de vida:
 
-```
-OU AccountPool
-├── Entry       → Contas entrando no pool
-├── Available   → Prontas para uso
-├── Active      → Em uso (lease ativo)
-├── Frozen      → Budget/tempo estourado
-├── CleanUp     → Sendo limpas pelo AWS Nuke
-├── Quarantine  → Limpeza falhou (intervenção manual)
-└── Exit        → Saindo do pool
-```
+![aws-innovation-ous](/assets/img/aws-innovation-ous.png)
 
 ### Arquitetura
 
@@ -110,9 +91,9 @@ A solução é composta por 4 stacks CloudFormation:
 | **Data**        | DynamoDB para estado, AppConfig para configurações globais       |
 | **Compute**     | API Gateway, Lambdas, Step Functions, CloudFront (UI), WAF       |
 
-Todos os componentes são serverless, resultando em um custo de infraestrutura de apenas **~$65/mês** — independente de quantas contas você gerencia.
+Todos os componentes são serverless, resultando em um custo de infraestrutura de apenas **~$65/mês** independente de quantas contas você gerencia.
 
-![](/assets/img/aws-cloudformation-innovation-sandbox.png)
+![aws-cloudformation-innovation-sandbox](/assets/img/aws-cloudformation-innovation-sandbox.png)
 
 ### O que protege suas contas sandbox
 
@@ -139,7 +120,7 @@ Todos os componentes são serverless, resultando em um custo de infraestrutura d
 * Acesso à UI restrito por CIDR (VPN corporativa)
 * Proteção contra exploits e bots
 
-![](/assets/img/aws-app-config-innovation-sandbox.png)
+![aws-app-config-innovation-sandbox](/assets/img/aws-app-config-innovation-sandbox.png)
 
 ## A interface: Self-service para o time
 
@@ -157,7 +138,7 @@ O usuário final tem uma experiência simples:
 6. Usa pelo tempo/budget definido
 7. Conta é automaticamente limpa e reciclada
 
-![](/assets/img/aws-request-lease-innovation-sandbox.png)
+![aws-request-lease-innovation-sandbox](/assets/img/aws-request-lease-innovation-sandbox.png)
 
 ### Visão do Manager
 
@@ -167,7 +148,7 @@ Managers podem:
 * Visualizar uso de budget dos leases ativos
 * Monitorar status das contas do pool
 
-![](/assets/img/aws-lease-innovation-sandbox.png)
+![aws-lease-innovation-sandbox](/assets/img/aws-lease-innovation-sandbox.png)
 
 ### Visão do Admin
 
@@ -179,7 +160,7 @@ Admins têm controle total:
 * Ativar/desativar modo de manutenção
 * Visualizar contas em quarentena
 
-![](/assets/img/aws-accounts-innovation-sandbox.png)
+![aws-accounts-innovation-sandbox](/assets/img/aws-accounts-innovation-sandbox.png)
 
 ## Por que isso potencializa experimentação com IA
 
@@ -216,7 +197,7 @@ Está treinando o time em serviços de IA? Crie um Lease Template específico:
 
 Cada membro do time ganha sua própria conta isolada para aprender, errar e experimentar.
 
-![](/assets/img/aws-lease-template-treinamento.png)
+![aws-lease-template-treinamento](/assets/img/aws-lease-template-treinamento.png)
 
 ### Cenário 4: Hackathons internos
 
@@ -242,7 +223,7 @@ Antes de deployar, você precisa garantir:
 * **Lambda concurrent quota ≥ 1000** (solicitar com antecedência!)
 * Contas AWS já criadas para o pool
 
-![](/assets/img/aws-ou-estrutura.png)
+![aws-ou-estrutura](/assets/img/aws-ou-estrutura.png)
 
 ### Deploy dos stacks
 
@@ -265,7 +246,7 @@ A parte mais importante do pós-deploy é a configuração SAML:
 4. Atribuir grupos (Admins, Managers, Users) à aplicação
 5. Upload do certificado SAML no Secrets Manager
 
-![](/assets/img/aws-idc-application.png)
+![aws-idc-application](/assets/img/aws-idc-application.png)
 
 ### Adicionando contas ao pool
 
@@ -343,12 +324,12 @@ aws cloudformation update-stack \
 
 Pontos importantes para monitorar:
 
-* Contas em **Quarantine** (limpeza falhou — requer intervenção manual)
+* Contas em **Quarantine** (limpeza falhou, requer intervenção manual)
 * Leases próximos de expirar
 * Budget consumption por lease
 * Erros no Step Functions de cleanup
 
-![](/assets/img/aws-step-cleanup.png)
+![aws-step-cleanup](/assets/img/aws-step-cleanup.png)
 
 ## Custo da solução
 
@@ -361,7 +342,7 @@ A infraestrutura é quase irrelevante em termos de custo. O valor real está no 
 
 ## Conclusão
 
-O Innovation Sandbox on AWS transforma a experimentação de um processo burocrático e arriscado em algo ágil, seguro e governado. Em um momento onde a IA generativa está redefinindo como construímos software, a capacidade de experimentar rapidamente não é luxo — é necessidade competitiva.
+O Innovation Sandbox on AWS transforma a experimentação de um processo burocrático e arriscado em algo ágil, seguro e governado. Em um momento onde a IA generativa está redefinindo como construímos software, a capacidade de experimentar rapidamente não é luxo, é necessidade competitiva.
 
 Com essa solução, seu time pode:
 
