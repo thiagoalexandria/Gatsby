@@ -157,11 +157,7 @@ O usuário final tem uma experiência simples:
 6. Usa pelo tempo/budget definido
 7. Conta é automaticamente limpa e reciclada
 
-> 📸 **Print sugerida:** Tela de login via Identity Center (SSO)
->
-> 📸 **Print sugerida:** Tela de termos de serviço (Terms of Service) que o usuário vê ao solicitar um lease
->
-> 📸 **Print sugerida:** Tela de "Request Lease" mostrando os templates disponíveis e campos de budget/duração
+![](/assets/img/aws-request-lease-innovation-sandbox.png)
 
 ### Visão do Manager
 
@@ -171,7 +167,7 @@ Managers podem:
 * Visualizar uso de budget dos leases ativos
 * Monitorar status das contas do pool
 
-> 📸 **Print sugerida:** Dashboard do Manager mostrando leases ativos e status
+![](/assets/img/aws-lease-innovation-sandbox.png)
 
 ### Visão do Admin
 
@@ -183,9 +179,7 @@ Admins têm controle total:
 * Ativar/desativar modo de manutenção
 * Visualizar contas em quarentena
 
-> 📸 **Print sugerida:** Painel de Admin mostrando contas registradas e seus status (Available, Active, Frozen, etc.)
->
-> 📸 **Print sugerida:** Tela de criação de Lease Template
+![](/assets/img/aws-accounts-innovation-sandbox.png)
 
 ## Por que isso potencializa experimentação com IA
 
@@ -222,7 +216,7 @@ Está treinando o time em serviços de IA? Crie um Lease Template específico:
 
 Cada membro do time ganha sua própria conta isolada para aprender, errar e experimentar.
 
-> 📸 **Print sugerida:** Lease Template configurado para treinamento com valores de budget e duração menores
+![](/assets/img/aws-lease-template-treinamento.png)
 
 ### Cenário 4: Hackathons internos
 
@@ -248,7 +242,7 @@ Antes de deployar, você precisa garantir:
 * **Lambda concurrent quota ≥ 1000** (solicitar com antecedência!)
 * Contas AWS já criadas para o pool
 
-> 📸 **Print sugerida:** Console do AWS Organizations mostrando a estrutura de OUs criada pela solução (Entry, Available, Active, Frozen, CleanUp, Quarantine, Exit)
+![](/assets/img/aws-ou-estrutura.png)
 
 ### Deploy dos stacks
 
