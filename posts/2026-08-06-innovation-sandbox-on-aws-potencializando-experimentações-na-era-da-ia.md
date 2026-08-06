@@ -248,23 +248,12 @@ Antes de deployar, você precisa garantir:
 
 O deploy segue uma ordem obrigatória:
 
-```bash
-# 1. AccountPool (Management Account)
-aws cloudformation create-stack \
-  --stack-name LabPoolAccountPool \
-  --template-url https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-AccountPool.template \
-  --parameters ParameterKey=Namespace,ParameterValue=labpool \
-               ParameterKey=HubAccountId,ParameterValue=<ACCOUNT_ID> \
-               ParameterKey=ParentOuId,ParameterValue=<OU_ID> \
-               ParameterKey=IsbManagedRegions,ParameterValue=us-east-1 \
-  --capabilities CAPABILITY_NAMED_IAM
-
-# 2. IDC
-# 3. Data
-# 4. Compute (upload template pro S3 antes - é >250KB)
-```
-
-> 📸 **Print sugerida:** Stack do CloudFormation durante criação mostrando os recursos sendo provisionados
+| Stack        | CloudFormation Launch Link                                                                                                                                                                                                                    | S3 Download Link                                                                                                                 |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Account Pool | [Launch](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?&templateURL=https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-AccountPool.template&redirectId=GitHub) | [Download](https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-AccountPool.template) |
+| IDC          | [Launch](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?&templateURL=https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-IDC.template&redirectId=GitHub)         | [Download](https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-IDC.template)         |
+| Data         | [Launch](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?&templateURL=https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-Data.template&redirectId=GitHub)        | [Download](https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-Data.template)        |
+| Compute      | [Launch](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?&templateURL=https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-Compute.template&redirectId=GitHub)     | [Download](https://solutions-reference.s3.amazonaws.com/innovation-sandbox-on-aws/latest/InnovationSandbox-Compute.template)     |
 
 ### Pós-deploy: Configuração do Identity Center
 
@@ -276,9 +265,7 @@ A parte mais importante do pós-deploy é a configuração SAML:
 4. Atribuir grupos (Admins, Managers, Users) à aplicação
 5. Upload do certificado SAML no Secrets Manager
 
-> 📸 **Print sugerida:** Configuração da aplicação SAML no Identity Center mostrando o ACS URL e audience
->
-> 📸 **Print sugerida:** Tela de attribute mapping no Identity Center (Subject → ${user:email})
+![](/assets/img/aws-idc-application.png)
 
 ### Adicionando contas ao pool
 
@@ -287,10 +274,6 @@ Após o deploy, você precisa registrar contas:
 1. Mova as contas para a sub-OU **Entry** (não a OU pai!)
 2. Na UI, vá em Admin → as contas aparecem como "Unregistered"
 3. Registre pela interface
-
-> 📸 **Print sugerida:** UI mostrando contas "Unregistered" prontas para serem registradas
->
-> 📸 **Print sugerida:** UI mostrando contas já registradas no status "Available"
 
 ## Customização
 
@@ -314,8 +297,6 @@ aws s3 sync . s3://<bucket-frontend>/
 aws cloudfront create-invalidation --distribution-id <ID> --paths "/*"
 ```
 
-> 📸 **Print sugerida:** UI customizada com a identidade visual da sua empresa (antes e depois)
-
 ### Termos de serviço em português
 
 No AppConfig, você configura termos de uso que aparecem ao solicitar um lease:
@@ -332,8 +313,6 @@ termsOfService: |
   Importante: Todos os recursos serão permanentemente excluídos
   quando o limite de budget ou tempo for atingido.
 ```
-
-> 📸 **Print sugerida:** Tela do AppConfig com a Global Config mostrando o YAML dos termos de serviço
 
 ## Operação e manutenção
 
@@ -369,7 +348,7 @@ Pontos importantes para monitorar:
 * Budget consumption por lease
 * Erros no Step Functions de cleanup
 
-> 📸 **Print sugerida:** Step Functions mostrando o fluxo de cleanup de uma conta (execução bem-sucedida)
+(FOTO STEP FUNCTIONS)
 
 ## Custo da solução
 
